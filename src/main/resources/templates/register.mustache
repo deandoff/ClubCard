@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Регистрация</title>
+    <script>
+        function validateForm() {
+            const firstName = document.forms["registrationForm"]["firstName"].value;
+            const lastName = document.forms["registrationForm"]["lastName"].value;
+            const email = document.forms["registrationForm"]["email"].value;
+            const password = document.forms["registrationForm"]["password"].value;
+            const passwordConfirm = document.forms["registrationForm"]["passwordConfirm"].value;
+            const phone = document.forms["registrationForm"]["phone"].value;
+            const birthday = document.forms["registrationForm"]["birthday"].value;
+            const today = new Date();
+            const birthdayDate = birthday ? new Date(birthday) : null;
+
+            // Проверка имени и фамилии
+            if (firstName.length < 2 || lastName.length < 2) {
+                alert("Имя и фамилия должны содержать не менее 2 букв.");
+                return false;
+            }
+
+            // Проверка email
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                alert("Введите корректный адрес электронной почты.");
+                return false;
+            }
+
+            // Проверка пароля
+            const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+            if (!passwordRegex.test(password)) {
+                alert("Пароль должен содержать не менее 8 символов, включая буквы, цифры и специальные символы.");
+                return false;
+            }
+
+            // Проверка совпадения паролей
+            if (password !== passwordConfirm) {
+                alert("Пароли не совпадают.");
+                return false;
+            }
+
+            // Проверка формата телефона, если он введен
+            if (phone && !/^\+7 \d{3} \d{3}-\d{2}-\d{2}$/.test(phone)) {
+                alert("Телефон должен быть в формате +7 XXX XXX-XX-XX.");
+                return false;
+            }
+
+            // Проверка даты рождения, если она введена
+            if (birthdayDate && birthdayDate > today) {
+                alert("Дата рождения не может быть в будущем.");
+                return false;
+            }
+
+            return true;
+        }
+    </script>
+</head>
+<body>
+<h1>Регистрация</h1>
+<form name="registrationForm" action="/register" method="post" onsubmit="return validateForm()">
+    <div>
+        <label>Имя:
+            <input type="text" name="firstName" required />
+        </label>
+    </div>
+    <div>
+        <label>Фамилия:
+            <input type="text" name="lastName" required />
+        </label>
+    </div>
+    <div>
+        <label>Email:
+            <input type="email" name="email" required />
+        </label>
+    </div>
+    <div>
+        <label>Пароль:
+            <input type="password" name="password" required />
+        </label>
+    </div>
+    <div>
+        <label>Подтверждение пароля:
+            <input type="password" name="passwordConfirm" required />
+        </label>
+    </div>
+    <div>
+        <label>Телефон (необязательно):
+            <input type="tel" name="phone" placeholder="+7 XXX XX-XX" />
+        </label>
+    </div>
+    <div>
+        <label>Дата рождения (необязательно):
+            <input type="date" name="birthday" />
+        </label>
+    </div>
+    <div>
+        <input type="submit" value="Зарегистрироваться" />
+    </div>
+</form>
+<a href="/login">Уже зарегистрированы? Войдите</a>
+</body>
+</html>
